@@ -20,7 +20,7 @@ Publish `build.json` at the Pages root with this schema:
 }
 ```
 
-The frontend fetches it from `import.meta.env.BASE_URL + "build.json"` and shows version and commit in the UI.
+The frontend fetches it from `import.meta.env.BASE_URL + "build.json"` and shows version and commit in the UI. It may also call the public GitHub commits API for `main` to display the latest published commit, falling back to `build.json` if the public API is unavailable or rate-limited.
 
 ## Consequences
 
