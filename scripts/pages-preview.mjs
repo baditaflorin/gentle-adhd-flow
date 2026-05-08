@@ -1,5 +1,5 @@
 import { createServer } from 'node:http'
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { extname, join, normalize } from 'node:path'
 
 const port = Number(process.env.PORT ?? 4173)
@@ -28,12 +28,17 @@ function resolvePath(url) {
   return join(root, 'index.html')
 }
 
-createServer((request, response) => {
+const server = createServer((request, response) => {
   const filePath = resolvePath(request.url ?? '/')
   const ext = extname(filePath)
   response.setHeader('Content-Type', contentTypes[ext] ?? 'application/octet-stream')
   response.setHeader('Cache-Control', 'no-store')
   response.end(readFileSync(filePath))
-}).listen(port, host, () => {
-  console.log(`Pages preview: http://${host}:${port}${base}/`)
+})
+
+server.listen(port, host, () => {
+  const address = server.address()
+  const actualPort = typeof address === 'object' && address ? address.port : port
+  if (process.env.PORT_FILE) writeFileSync(process.env.PORT_FILE, `${actualPort}`)
+  console.log(`Pages preview: http://${host}:${actualPort}${base}/`)
 })

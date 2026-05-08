@@ -36,7 +36,9 @@ function App() {
     [activeFocusTaskId, snapshot.tasks],
   )
 
-  const completedToday = snapshot.tasks.filter((task) => task.completedAt?.startsWith(todayPrefix())).length
+  const completedToday = snapshot.tasks.filter((task) =>
+    task.completedAt?.startsWith(todayPrefix()),
+  ).length
   const openTasks = snapshot.tasks.filter((task) => task.status !== 'done').length
 
   return (
@@ -91,11 +93,7 @@ function App() {
           updateWorkspace={updateWorkspace}
           onFocusTask={(taskId) => setActiveFocusTaskId(taskId)}
         />
-        <FocusPanel
-          focusTask={focusTask}
-          snapshot={snapshot}
-          updateWorkspace={updateWorkspace}
-        />
+        <FocusPanel focusTask={focusTask} snapshot={snapshot} updateWorkspace={updateWorkspace} />
         <HabitPanel snapshot={snapshot} updateWorkspace={updateWorkspace} />
         <InsightsPanel snapshot={snapshot} />
         <SettingsPanel snapshot={snapshot} updateWorkspace={updateWorkspace} />
@@ -103,11 +101,14 @@ function App() {
 
       <footer className="app-footer">
         <span className="status-pill">
-          <Activity size={15} aria-hidden="true" />
-          v{buildMeta.data?.version ?? '0.1.0'}
+          <Activity size={15} aria-hidden="true" />v{buildMeta.data?.version ?? '0.1.0'}
         </span>
         <span>Commit {buildMeta.data?.commit ?? 'local'}</span>
-        <span>{buildMeta.data?.builtAt ? new Date(buildMeta.data.builtAt).toLocaleString() : 'Local build'}</span>
+        <span>
+          {buildMeta.data?.builtAt
+            ? new Date(buildMeta.data.builtAt).toLocaleString()
+            : 'Local build'}
+        </span>
         <a href={repoUrl} target="_blank" rel="noreferrer">
           {repoUrl}
         </a>

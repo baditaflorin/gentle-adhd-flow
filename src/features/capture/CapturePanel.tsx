@@ -48,7 +48,11 @@ export function CapturePanel({ snapshot, updateWorkspace }: Props) {
     setStatus('Local model warming up')
     const result = await refineWithLocalLlm(text)
     setText(result.text)
-    setStatus(result.engine === 'transformers' ? 'Local model refined it' : 'Deterministic mode kept it steady')
+    setStatus(
+      result.engine === 'transformers'
+        ? 'Local model refined it'
+        : 'Deterministic mode kept it steady',
+    )
   }
 
   async function handleSpeak() {
@@ -78,7 +82,11 @@ export function CapturePanel({ snapshot, updateWorkspace }: Props) {
         setStatus('Whisper transcribing locally')
         const result = await transcribeWithWhisper(new Blob(chunks.current, { type: 'audio/webm' }))
         if (result.text) setText((current) => `${current}\n${result.text}`.trim())
-        setStatus(result.engine === 'whisper' ? 'Whisper transcript added' : 'Recording saved, transcript unavailable')
+        setStatus(
+          result.engine === 'whisper'
+            ? 'Whisper transcript added'
+            : 'Recording saved, transcript unavailable',
+        )
       }
       mediaRecorder.start()
       setRecording(true)
@@ -116,7 +124,11 @@ export function CapturePanel({ snapshot, updateWorkspace }: Props) {
           Local LLM
         </Button>
         <Button onClick={toggleRecording} tone={recording ? 'danger' : 'secondary'}>
-          {recording ? <Square size={17} aria-hidden="true" /> : <Mic size={17} aria-hidden="true" />}
+          {recording ? (
+            <Square size={17} aria-hidden="true" />
+          ) : (
+            <Mic size={17} aria-hidden="true" />
+          )}
           {recording ? 'Stop' : 'Whisper'}
         </Button>
         <Button onClick={handleSpeak} tone="quiet">

@@ -35,7 +35,8 @@ export function extractBrainDump(text: string, now = new Date()): ExtractionResu
       continue
     }
 
-    if (!taskSignals.test(chunk) && chunks.length > 1 && chunk.length < 18) continue
+    const hasTaskSignal = taskSignals.test(chunk) || Boolean(inferDueDate(chunk, now))
+    if (!hasTaskSignal) continue
 
     const title = cleanTitle(chunk)
     if (!title) continue
@@ -93,7 +94,10 @@ function splitBrainDump(text: string) {
 function cleanTitle(value: string) {
   const cleaned = value
     .replace(actionPrefixes, '')
-    .replace(/\b(today|tomorrow|tonight|this week|next week)\b/gi, '')
+    .replace(
+      /\b(today|tomorrow|tonight|this week|next week|every morning|each morning|every night|each night)\b/gi,
+      '',
+    )
     .replace(/\b(by|before|after)\s+\w+/gi, '')
     .replace(/\s+/g, ' ')
     .trim()
@@ -106,7 +110,8 @@ function inferNextAction(title: string, original: string) {
   if (lower.includes('email')) return `Open the email draft for "${title}"`
   if (lower.includes('call')) return `Find the number for "${title}"`
   if (lower.includes('buy')) return `Put "${title}" on a short shopping list`
-  if (lower.includes('book') || lower.includes('schedule')) return `Open the calendar for "${title}"`
+  if (lower.includes('book') || lower.includes('schedule'))
+    return `Open the calendar for "${title}"`
   if (lower.includes('clean')) return `Set a 10-minute timer for "${title}"`
   return `Start with a 10-minute version of "${title}"`
 }
@@ -121,7 +126,11 @@ function inferEnergy(value: string): Energy {
 function inferUrgency(value: string): Urgency {
   const lower = value.toLowerCase()
   if (/\b(urgent|asap|now|today|tonight|deadline)\b/.test(lower)) return 'now'
-  if (/\b(tomorrow|soon|this week|friday|monday|tuesday|wednesday|thursday|saturday|sunday)\b/.test(lower)) {
+  if (
+    /\b(tomorrow|soon|this week|friday|monday|tuesday|wednesday|thursday|saturday|sunday)\b/.test(
+      lower,
+    )
+  ) {
     return 'soon'
   }
   return 'later'
@@ -178,7 +187,9 @@ function inferDueDate(value: string, now: Date) {
 }
 
 function isHabit(value: string) {
-  return /\b(habit|daily|every day|each day|every morning|each morning|every night|each night)\b/i.test(value)
+  return /\b(habit|daily|every day|each day|every morning|each morning|every night|each night)\b/i.test(
+    value,
+  )
 }
 
 function inferHabitCue(value: string) {

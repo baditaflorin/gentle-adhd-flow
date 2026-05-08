@@ -89,7 +89,11 @@ export function HabitPanel({ snapshot, updateWorkspace }: Props) {
                     {currentStreak(habit)} day streak · {habit.cue}
                   </p>
                 </div>
-                <Button onClick={() => remove(habit.id)} tone="quiet" aria-label={`Delete ${habit.title}`}>
+                <Button
+                  onClick={() => remove(habit.id)}
+                  tone="quiet"
+                  aria-label={`Delete ${habit.title}`}
+                >
                   <Trash2 size={16} aria-hidden="true" />
                 </Button>
               </article>

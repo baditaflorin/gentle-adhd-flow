@@ -5,7 +5,9 @@ const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.me
 
 function readGit(command, fallback) {
   try {
-    return execSync(command, { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+    return execSync(command, { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim()
   } catch {
     return fallback
   }

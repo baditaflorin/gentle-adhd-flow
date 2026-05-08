@@ -63,13 +63,21 @@ export function PlanPanel({ snapshot, updateWorkspace, onFocusTask }: Props) {
                 <span>{task.context}</span>
               </div>
               <div className="task-actions">
-                <Button onClick={() => onFocusTask(task.id)} tone="primary" aria-label={`Focus on ${task.title}`}>
+                <Button
+                  onClick={() => onFocusTask(task.id)}
+                  tone="primary"
+                  aria-label={`Focus on ${task.title}`}
+                >
                   <Play size={16} aria-hidden="true" />
                 </Button>
                 <Button onClick={() => completeTask(task.id)} aria-label={`Complete ${task.title}`}>
                   <Check size={16} aria-hidden="true" />
                 </Button>
-                <Button onClick={() => deleteTask(task.id)} tone="quiet" aria-label={`Delete ${task.title}`}>
+                <Button
+                  onClick={() => deleteTask(task.id)}
+                  tone="quiet"
+                  aria-label={`Delete ${task.title}`}
+                >
                   <Trash2 size={16} aria-hidden="true" />
                 </Button>
               </div>

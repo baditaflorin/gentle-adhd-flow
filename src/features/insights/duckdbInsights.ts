@@ -51,7 +51,9 @@ export async function runInsights(snapshot: AppSnapshot): Promise<InsightReport>
       engine: 'fallback',
       openTasks: snapshot.tasks.filter((task) => task.status !== 'done').length,
       completedTasks: snapshot.tasks.filter((task) => task.status === 'done').length,
-      highEnergyTasks: snapshot.tasks.filter((task) => task.energy === 'high' && task.status !== 'done').length,
+      highEnergyTasks: snapshot.tasks.filter(
+        (task) => task.energy === 'high' && task.status !== 'done',
+      ).length,
       focusMinutes: snapshot.focusSessions.reduce((total, session) => total + session.minutes, 0),
     })
   }

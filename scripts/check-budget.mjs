@@ -1,5 +1,5 @@
 import { gzipSync } from 'node:zlib'
-import { readdirSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const assetsDir = 'docs/assets'
@@ -8,9 +8,11 @@ const budgetBytes = 200 * 1024
 let initialBytes = 0
 
 try {
-  for (const file of readdirSync(assetsDir)) {
-    if (!file.endsWith('.js')) continue
-    if (/ai-transformers|duckdb-wasm|piper-tts|tone-focus/.test(file)) continue
+  const index = readFileSync('docs/index.html', 'utf8')
+  const scripts = [...index.matchAll(/src="\/gentle-adhd-flow\/assets\/([^"]+\.js)"/g)].map(
+    (match) => match[1],
+  )
+  for (const file of scripts) {
     initialBytes += gzipSync(readFileSync(join(assetsDir, file))).length
   }
 } catch {

@@ -18,7 +18,8 @@ export async function speakCue(text: string): Promise<SpeakEngine> {
     }
     const audioBytes = response.file ?? response.wav ?? response.audio
     if (audioBytes) {
-      const blob = audioBytes instanceof Blob ? audioBytes : new Blob([audioBytes], { type: 'audio/wav' })
+      const blob =
+        audioBytes instanceof Blob ? audioBytes : new Blob([audioBytes], { type: 'audio/wav' })
       await new Audio(URL.createObjectURL(blob)).play()
       return 'piper'
     }

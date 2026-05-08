@@ -7,6 +7,9 @@ const storageName = 'gentle-adhd-flow-v1'
 const doc = new Y.Doc()
 const root = doc.getMap<unknown>('workspace')
 const listeners = new Set<() => void>()
+const fallbackSnapshot = createDefaultSnapshot()
+let cachedRawSnapshot: unknown
+let cachedSnapshot = fallbackSnapshot
 
 let synced = false
 
@@ -32,9 +35,15 @@ export function subscribeWorkspace(listener: () => void) {
 }
 
 export function getWorkspaceSnapshot(): AppSnapshot {
-  const parsed = appSnapshotSchema.safeParse(root.get('snapshot'))
-  if (parsed.success) return parsed.data
-  return createDefaultSnapshot()
+  const rawSnapshot = root.get('snapshot')
+  if (rawSnapshot === cachedRawSnapshot) return cachedSnapshot
+  const parsed = appSnapshotSchema.safeParse(rawSnapshot)
+  if (parsed.success) {
+    cachedRawSnapshot = rawSnapshot
+    cachedSnapshot = parsed.data
+    return cachedSnapshot
+  }
+  return fallbackSnapshot
 }
 
 export function updateWorkspace(recipe: (draft: AppSnapshot) => AppSnapshot | void) {

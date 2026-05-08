@@ -33,20 +33,30 @@ export function InsightsPanel({ snapshot }: Props) {
 
       <div className="metric-grid">
         <div>
-          <span>{report?.openTasks ?? snapshot.tasks.filter((task) => task.status !== 'done').length}</span>
+          <span>
+            {report?.openTasks ?? snapshot.tasks.filter((task) => task.status !== 'done').length}
+          </span>
           <p>open</p>
         </div>
         <div>
-          <span>{report?.completedTasks ?? snapshot.tasks.filter((task) => task.status === 'done').length}</span>
+          <span>
+            {report?.completedTasks ??
+              snapshot.tasks.filter((task) => task.status === 'done').length}
+          </span>
           <p>done</p>
         </div>
         <div>
-          <span>{report?.focusMinutes ?? snapshot.focusSessions.reduce((total, session) => total + session.minutes, 0)}</span>
+          <span>
+            {report?.focusMinutes ??
+              snapshot.focusSessions.reduce((total, session) => total + session.minutes, 0)}
+          </span>
           <p>focus min</p>
         </div>
       </div>
 
-      <p className="insight-copy">{report?.message ?? 'Run a local summary when the board feels noisy.'}</p>
+      <p className="insight-copy">
+        {report?.message ?? 'Run a local summary when the board feels noisy.'}
+      </p>
 
       <Button onClick={refresh} disabled={loading}>
         <RefreshCw size={17} aria-hidden="true" />

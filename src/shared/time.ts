@@ -12,5 +12,8 @@ export function addDays(date: Date, days: number) {
 }
 
 export function minutesBetween(startIso: string, endIso: string) {
-  return Math.max(1, Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000))
+  return Math.max(
+    1,
+    Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000),
+  )
 }

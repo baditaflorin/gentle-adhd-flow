@@ -1,0 +1,11 @@
+node_modules
+docs/assets
+docs/onnx
+docs/piper
+docs/404.html
+docs/index.html
+docs/sw.js
+package-lock.json
+coverage
+tmp
+test-results
