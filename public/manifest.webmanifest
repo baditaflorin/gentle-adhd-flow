@@ -1,0 +1,17 @@
+{
+  "name": "Gentle ADHD Flow",
+  "short_name": "Gentle Flow",
+  "description": "Local-first ADHD self-management for capture, planning, focus, and habits.",
+  "start_url": "/gentle-adhd-flow/",
+  "scope": "/gentle-adhd-flow/",
+  "display": "standalone",
+  "background_color": "#f7f3ea",
+  "theme_color": "#2f6b58",
+  "icons": [
+    {
+      "src": "/gentle-adhd-flow/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

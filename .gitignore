@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+coverage/
+tmp/
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.sqlite-wal
+*.sqlite-shm
+
+# Go
+bin/
+vendor/
+*.test
+*.out
+
+# Python
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+*.pyc
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

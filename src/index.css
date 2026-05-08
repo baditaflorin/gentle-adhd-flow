@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.link-button {
+  align-items: center;
+  background: #17201b;
+  border-radius: 8px;
+  color: #fffaf0;
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 700;
+  gap: 0.45rem;
+  line-height: 1;
+  min-height: 2.5rem;
+  padding: 0.75rem 0.95rem;
+  text-decoration: none;
+}
+
+.link-button:focus-visible {
+  outline: 3px solid #d69e2e;
+  outline-offset: 3px;
+}
