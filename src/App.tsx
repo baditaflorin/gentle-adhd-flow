@@ -13,7 +13,6 @@ import './index.css'
 
 const repoUrl = 'https://github.com/baditaflorin/gentle-adhd-flow'
 const paypalUrl = 'https://www.paypal.com/paypalme/florinbadita'
-const latestCommitUrl = 'https://api.github.com/repos/baditaflorin/gentle-adhd-flow/commits/main'
 
 function useBuildMeta() {
   return useQuery({
@@ -21,12 +20,7 @@ function useBuildMeta() {
     queryFn: async (): Promise<BuildMeta> => {
       const response = await fetch(`${import.meta.env.BASE_URL}build.json`, { cache: 'no-store' })
       if (!response.ok) throw new Error('Build metadata unavailable')
-      const meta = (await response.json()) as BuildMeta
-      const latest = await fetch(latestCommitUrl)
-        .then((response) => (response.ok ? response.json() : undefined))
-        .then((commit: { sha?: string } | undefined) => commit?.sha?.slice(0, 7))
-        .catch(() => undefined)
-      return latest ? { ...meta, commit: latest } : meta
+      return (await response.json()) as BuildMeta
     },
     staleTime: Number.POSITIVE_INFINITY,
   })

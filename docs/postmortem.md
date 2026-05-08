@@ -22,7 +22,7 @@ Yes. Mode A was the right choice. The app has no auth, no shared server state, n
 
 ## What Did Not Work
 
-- Build metadata cannot contain the hash of the same commit that contains it. The app now fetches the public GitHub `main` commit at runtime and falls back to `build.json`.
+- Build metadata cannot contain the hash of the same commit that contains it. The app shows the committed build metadata instead of calling the GitHub commits API, because unauthenticated runtime API calls can be rate-limited in browsers.
 - Piper's web package is large and emits a build-time eval warning from its bundled dependency code.
 - First-use AI and TTS experiences depend on browser capability, public model downloads, and cache space.
 
