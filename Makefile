@@ -1,9 +1,10 @@
 SHELL := /bin/bash
+VERSION := $(shell node -p "JSON.parse(require('fs').readFileSync('package.json')).version")
 
-.PHONY: help install-hooks dev build test test-integration smoke lint fmt pages-preview hooks-pre-commit hooks-commit-msg hooks-pre-push clean
+.PHONY: help install-hooks dev build test test-integration smoke lint fmt pages-preview hooks-pre-commit hooks-commit-msg hooks-pre-push release clean
 
 help:
-	@printf "%s\n" "Targets: install-hooks dev build test test-integration smoke lint fmt pages-preview hooks-pre-commit hooks-commit-msg hooks-pre-push clean"
+	@printf "%s\n" "Targets: install-hooks dev build test test-integration smoke lint fmt pages-preview hooks-pre-commit hooks-commit-msg hooks-pre-push release clean"
 
 install-hooks:
 	git config core.hooksPath .githooks
@@ -42,6 +43,10 @@ hooks-commit-msg:
 
 hooks-pre-push:
 	.githooks/pre-push
+
+release:
+	npm run build
+	git tag -a "v$(VERSION)" -m "v$(VERSION)"
 
 clean:
 	rm -rf coverage tmp dist

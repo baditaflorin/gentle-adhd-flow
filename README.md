@@ -1,12 +1,18 @@
 # Gentle ADHD Flow
 
+![Mode A GitHub Pages](https://img.shields.io/badge/deployment-GitHub%20Pages-2f6b58)
+![License MIT](https://img.shields.io/badge/license-MIT-3d5a80)
+![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-c85a3e)
+
 Live site: https://baditaflorin.github.io/gentle-adhd-flow/
 
 Repository: https://github.com/baditaflorin/gentle-adhd-flow
 
 Support: https://www.paypal.com/paypalme/florinbadita
 
-Local-first ADHD self-management: voice brain-dumps become tasks, focus sessions, habits, and gentle planning. The v1 app is a pure GitHub Pages static site: no backend, no accounts, no secrets in the frontend.
+Local-first ADHD self-management: voice brain-dumps become tasks, focus sessions, habits, and gentle planning. The v1 app is a pure GitHub Pages static site: no backend, no accounts, no secrets in the frontend, and personal data stays in browser storage.
+
+![Gentle ADHD Flow screenshot](docs/screenshot.png)
 
 ## Quickstart
 
@@ -20,7 +26,7 @@ make pages-preview
 
 ## Status
 
-The initial Pages shell is published first, then each feature lands in small commits. Build metadata is visible in the footer of the published app.
+V1 is live. Build metadata is visible in the footer of the published app, and the footer links back to the GitHub repository so visitors can star it.
 
 ## Architecture
 
@@ -40,3 +46,7 @@ flowchart LR
 Architecture decisions: https://github.com/baditaflorin/gentle-adhd-flow/tree/main/docs/adr
 
 Deploy notes: https://github.com/baditaflorin/gentle-adhd-flow/blob/main/docs/deploy.md
+
+Privacy notes: https://github.com/baditaflorin/gentle-adhd-flow/blob/main/docs/privacy.md
+
+Postmortem: https://github.com/baditaflorin/gentle-adhd-flow/blob/main/docs/postmortem.md
