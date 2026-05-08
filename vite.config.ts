@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -9,7 +8,7 @@ export default defineConfig({
   build: {
     outDir: 'docs',
     emptyOutDir: false,
-    sourcemap: true,
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -25,13 +24,5 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    viteStaticCopy({
-      targets: [
-        { src: 'node_modules/piper-tts-web/dist/onnx', dest: '.' },
-        { src: 'node_modules/piper-tts-web/dist/piper', dest: '.' },
-        { src: 'node_modules/piper-tts-web/dist/worker', dest: '.' },
-      ],
-      silent: true,
-    }),
   ],
 })
