@@ -37,10 +37,6 @@ export async function readCaptureFiles(files: FileList | File[]): Promise<Captur
   }
 }
 
-export function readTextFromDrop(event: DragEvent) {
-  return event.dataTransfer?.getData('text/plain') ?? ''
-}
-
 export const sampleBrainDump =
   'Call dentist tomorrow about crown estimate. Pay electricity bill today 15 min. Every morning take meds after coffee. Buy oat milk and batteries after work. Ask Sam for the tax portal password before Monday.'
 

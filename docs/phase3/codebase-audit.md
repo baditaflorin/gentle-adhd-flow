@@ -56,4 +56,13 @@ Source scan excluding built `docs/assets`: zero project-owned TODO/FIXME/XXX/HAC
 | Draft autosave           | Untested. | Add e2e or unit coverage.               |
 | Settings persistence     | Untested. | Add e2e coverage through reload/import. |
 
+After implementation:
+
+- DRY findings closed: workspace import/export, browser IO, and capture input parsing now have shared modules.
+- TODO/FIXME/XXX/HACK debt: still 0 project-owned occurrences.
+- Dead starter assets: 0 after deleting `src/assets/react.svg` and `src/assets/vite.svg`.
+- Unsafe casts outside documented dynamic-library boundaries: reduced; remaining casts are in AI/voice/WASM/DuckDB boundary code or literal unions.
+- Primary e2e paths: 3 tests cover happy capture, file import/autosave/export/import, copy/share/voice setting.
+
 Before metrics: DRY findings 3, TODO debt 0 project-owned, dead files 2, unsafe casts 9 source occurrences, primary e2e paths 1.
+After metrics: DRY findings 0, TODO debt 0 project-owned, dead files 0, primary e2e paths 3.
