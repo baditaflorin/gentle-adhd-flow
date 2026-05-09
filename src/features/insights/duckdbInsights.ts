@@ -33,18 +33,18 @@ export async function runInsights(snapshot: AppSnapshot): Promise<InsightReport>
       SELECT coalesce(sum(minutes), 0) AS focusMinutes
       FROM read_json_auto('focus.json')
     `)
-    const taskStats = taskRows.toArray()[0] as Record<string, number | bigint>
-    const focusStats = focusRows.toArray()[0] as Record<string, number | bigint>
+    const taskStats = taskRows.toArray()[0]
+    const focusStats = focusRows.toArray()[0]
     await connection.close()
     await db.terminate()
     worker.terminate()
 
     return makeReport({
       engine: 'duckdb',
-      openTasks: Number(taskStats.openTasks ?? 0),
-      completedTasks: Number(taskStats.completedTasks ?? 0),
-      highEnergyTasks: Number(taskStats.highEnergyTasks ?? 0),
-      focusMinutes: Number(focusStats.focusMinutes ?? 0),
+      openTasks: readDuckNumber(taskStats, 'openTasks'),
+      completedTasks: readDuckNumber(taskStats, 'completedTasks'),
+      highEnergyTasks: readDuckNumber(taskStats, 'highEnergyTasks'),
+      focusMinutes: readDuckNumber(focusStats, 'focusMinutes'),
     })
   } catch {
     return makeReport({
@@ -57,6 +57,12 @@ export async function runInsights(snapshot: AppSnapshot): Promise<InsightReport>
       focusMinutes: snapshot.focusSessions.reduce((total, session) => total + session.minutes, 0),
     })
   }
+}
+
+function readDuckNumber(row: unknown, key: string) {
+  if (!row || typeof row !== 'object' || !(key in row)) return 0
+  const value = row[key as keyof typeof row]
+  return typeof value === 'number' || typeof value === 'bigint' ? Number(value) : 0
 }
 
 function makeReport(report: Omit<InsightReport, 'message'>): InsightReport {
