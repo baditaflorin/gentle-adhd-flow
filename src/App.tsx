@@ -8,7 +8,7 @@ import { InsightsPanel } from './features/insights/InsightsPanel'
 import { PlanPanel } from './features/planning/PlanPanel'
 import { SettingsPanel } from './features/settings/SettingsPanel'
 import { useWorkspace } from './shared/storage/useWorkspace'
-import type { BuildMeta, Task } from './shared/types'
+import { buildMetaSchema, type BuildMeta, type Task } from './shared/types'
 import './index.css'
 
 const repoUrl = 'https://github.com/baditaflorin/gentle-adhd-flow'
@@ -20,14 +20,14 @@ function useBuildMeta() {
     queryFn: async (): Promise<BuildMeta> => {
       const response = await fetch(`${import.meta.env.BASE_URL}build.json`, { cache: 'no-store' })
       if (!response.ok) throw new Error('Build metadata unavailable')
-      return (await response.json()) as BuildMeta
+      return buildMetaSchema.parse(await response.json())
     },
     staleTime: Number.POSITIVE_INFINITY,
   })
 }
 
 function App() {
-  const { snapshot, updateWorkspace, isSynced } = useWorkspace()
+  const { snapshot, updateWorkspace, replaceWorkspace, isSynced } = useWorkspace()
   const [activeFocusTaskId, setActiveFocusTaskId] = useState<string | undefined>()
   const buildMeta = useBuildMeta()
 
@@ -96,7 +96,12 @@ function App() {
         <FocusPanel focusTask={focusTask} snapshot={snapshot} updateWorkspace={updateWorkspace} />
         <HabitPanel snapshot={snapshot} updateWorkspace={updateWorkspace} />
         <InsightsPanel snapshot={snapshot} />
-        <SettingsPanel snapshot={snapshot} updateWorkspace={updateWorkspace} />
+        <SettingsPanel
+          buildMeta={buildMeta.data}
+          snapshot={snapshot}
+          updateWorkspace={updateWorkspace}
+          replaceWorkspace={replaceWorkspace}
+        />
       </section>
 
       <footer className="app-footer">

@@ -515,3 +515,38 @@ textarea:focus-visible {
     min-height: 210px;
   }
 }
+
+@media print {
+  body,
+  .app-shell {
+    background: #ffffff;
+  }
+
+  .top-band,
+  .capture-panel,
+  .focus-panel,
+  .habit-panel,
+  .insights-panel,
+  .settings-panel,
+  .app-footer,
+  .task-actions,
+  .button-row {
+    display: none !important;
+  }
+
+  .flow-grid {
+    display: block;
+    margin-top: 0;
+  }
+
+  .plan-panel,
+  .task-card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .plan-panel {
+    border: 0;
+    padding: 0;
+  }
+}

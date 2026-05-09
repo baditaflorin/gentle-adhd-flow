@@ -11,11 +11,18 @@ type Props = {
 export function InsightsPanel({ snapshot }: Props) {
   const [report, setReport] = useState<InsightReport | undefined>()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | undefined>()
 
   async function refresh() {
     setLoading(true)
-    setReport(await runInsights(snapshot))
-    setLoading(false)
+    setError(undefined)
+    try {
+      setReport(await runInsights(snapshot))
+    } catch {
+      setError('Summary failed. Your tasks are still saved; try again after reload.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -55,7 +62,7 @@ export function InsightsPanel({ snapshot }: Props) {
       </div>
 
       <p className="insight-copy">
-        {report?.message ?? 'Run a local summary when the board feels noisy.'}
+        {error ?? report?.message ?? 'Run a local summary when the board feels noisy.'}
       </p>
 
       <Button onClick={refresh} disabled={loading}>

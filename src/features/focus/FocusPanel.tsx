@@ -17,6 +17,7 @@ export function FocusPanel({ focusTask, snapshot, updateWorkspace }: Props) {
   const [running, setRunning] = useState(false)
   const [startedAt, setStartedAt] = useState<string | undefined>()
   const [elapsed, setElapsed] = useState(0)
+  const [status, setStatus] = useState('ready')
   const ambient = useRef<AmbientHandle | undefined>(undefined)
 
   useEffect(() => {
@@ -28,17 +29,23 @@ export function FocusPanel({ focusTask, snapshot, updateWorkspace }: Props) {
   }, [running, startedAt])
 
   async function start() {
-    const handle = await startAmbient(snapshot.settings.soundscape)
-    ambient.current = handle
-    setStartedAt(new Date().toISOString())
-    setElapsed(0)
-    setRunning(true)
+    try {
+      const handle = await startAmbient(snapshot.settings.soundscape)
+      ambient.current = handle
+      setStartedAt(new Date().toISOString())
+      setElapsed(0)
+      setRunning(true)
+      setStatus('running')
+    } catch {
+      setStatus('audio blocked; try again after a click')
+    }
   }
 
   function stop() {
     ambient.current?.stop()
     ambient.current = undefined
     setRunning(false)
+    setStatus('landed')
     const endedAt = new Date().toISOString()
     if (startedAt) {
       updateWorkspace((draft) => {
@@ -76,7 +83,9 @@ export function FocusPanel({ focusTask, snapshot, updateWorkspace }: Props) {
           <p className="eyebrow">Focus</p>
           <h2>{focusTask?.title ?? 'Open focus'}</h2>
         </div>
-        <span className="soft-badge">{formatTime(remaining)}</span>
+        <span className="soft-badge">
+          {formatTime(remaining)} · {status}
+        </span>
       </div>
 
       <FocusCanvas running={running} soundscape={snapshot.settings.soundscape} />

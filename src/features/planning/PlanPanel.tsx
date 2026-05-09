@@ -1,6 +1,9 @@
-import { CalendarCheck, Check, Clock, Play, Trash2 } from 'lucide-react'
+import { CalendarCheck, Check, Clipboard, Clock, Play, Printer, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { copyText, printPage } from '../../shared/browserIO'
 import { Button, EmptyState, ToolPanel } from '../../shared/ui'
 import type { AppSnapshot, Task, WorkspaceUpdater } from '../../shared/types'
+import { formatPlanText } from '../../shared/workspaceIO'
 
 type Props = {
   snapshot: AppSnapshot
@@ -9,6 +12,7 @@ type Props = {
 }
 
 export function PlanPanel({ snapshot, updateWorkspace, onFocusTask }: Props) {
+  const [status, setStatus] = useState('ready')
   const tasks = snapshot.tasks.filter((task) => task.status !== 'done')
 
   function patchTask(taskId: string, patch: Partial<Task>) {
@@ -31,6 +35,20 @@ export function PlanPanel({ snapshot, updateWorkspace, onFocusTask }: Props) {
     })
   }
 
+  async function copyPlan() {
+    try {
+      await copyText(formatPlanText(snapshot))
+      setStatus('copied')
+    } catch {
+      setStatus('copy failed')
+    }
+  }
+
+  function printPlan() {
+    setStatus('print ready')
+    printPage()
+  }
+
   return (
     <ToolPanel title="Plan" className="plan-panel">
       <div className="panel-heading">
@@ -38,7 +56,20 @@ export function PlanPanel({ snapshot, updateWorkspace, onFocusTask }: Props) {
           <p className="eyebrow">Scaffold</p>
           <h2>Next actions</h2>
         </div>
-        <span className="soft-badge">{tasks.length} open</span>
+        <span className="soft-badge">
+          {tasks.length} open · {status}
+        </span>
+      </div>
+
+      <div className="button-row">
+        <Button onClick={copyPlan} tone="quiet">
+          <Clipboard size={17} aria-hidden="true" />
+          Copy plan
+        </Button>
+        <Button onClick={printPlan} tone="quiet">
+          <Printer size={17} aria-hidden="true" />
+          Print
+        </Button>
       </div>
 
       <div className="task-list">
