@@ -1,11 +1,18 @@
 import { z } from 'zod'
 import { newId } from '../../shared/id'
 import { addDays, localDateKey } from '../../shared/time'
-import type { Energy, Habit, Task, Urgency } from '../../shared/types'
+import {
+  habitSchema,
+  taskSchema,
+  type Energy,
+  type Habit,
+  type Task,
+  type Urgency,
+} from '../../shared/types'
 
 export const extractionResultSchema = z.object({
-  tasks: z.array(z.custom<Task>()),
-  habits: z.array(z.custom<Habit>()),
+  tasks: z.array(taskSchema),
+  habits: z.array(habitSchema),
   confidence: z.number().min(0).max(1),
 })
 

@@ -1,6 +1,7 @@
 import * as Y from 'yjs'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import { appSnapshotSchema, type AppSnapshot } from '../types'
+import { parseWorkspaceImportValue } from '../workspaceIO'
 import { createDefaultSnapshot } from './defaultSnapshot'
 
 const storageName = 'gentle-adhd-flow-v1'
@@ -37,13 +38,14 @@ export function subscribeWorkspace(listener: () => void) {
 export function getWorkspaceSnapshot(): AppSnapshot {
   const rawSnapshot = root.get('snapshot')
   if (rawSnapshot === cachedRawSnapshot) return cachedSnapshot
-  const parsed = appSnapshotSchema.safeParse(rawSnapshot)
-  if (parsed.success) {
+  try {
+    const parsed = parseWorkspaceImportValue(rawSnapshot)
     cachedRawSnapshot = rawSnapshot
-    cachedSnapshot = parsed.data
+    cachedSnapshot = parsed.snapshot
     return cachedSnapshot
+  } catch {
+    return fallbackSnapshot
   }
-  return fallbackSnapshot
 }
 
 export function updateWorkspace(recipe: (draft: AppSnapshot) => AppSnapshot | void) {

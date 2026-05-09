@@ -59,6 +59,12 @@ export const appSnapshotSchema = z.object({
   }),
 })
 
+export const buildMetaSchema = z.object({
+  version: z.string(),
+  commit: z.string(),
+  builtAt: z.string(),
+})
+
 export type Energy = z.infer<typeof energySchema>
 export type Urgency = z.infer<typeof urgencySchema>
 export type TaskStatus = z.infer<typeof taskStatusSchema>
@@ -67,11 +73,6 @@ export type Habit = z.infer<typeof habitSchema>
 export type FocusSession = z.infer<typeof focusSessionSchema>
 export type CaptureEntry = z.infer<typeof captureEntrySchema>
 export type AppSnapshot = z.infer<typeof appSnapshotSchema>
-
-export type BuildMeta = {
-  version: string
-  commit: string
-  builtAt: string
-}
+export type BuildMeta = z.infer<typeof buildMetaSchema>
 
 export type WorkspaceUpdater = (recipe: (draft: AppSnapshot) => AppSnapshot | void) => void
