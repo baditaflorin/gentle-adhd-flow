@@ -75,13 +75,13 @@ export function SettingsPanel({ buildMeta, snapshot, updateWorkspace, replaceWor
       return
     }
     const url = `${window.location.origin}${window.location.pathname}#state=${encoded}`
+    window.history.replaceState(null, '', `#state=${encoded}`)
+    setHasShareHash(true)
     try {
       await copyText(url)
       setStatus('Share link copied')
     } catch {
       setStatus('Share link ready in address bar')
-      window.history.replaceState(null, '', `#state=${encoded}`)
-      setHasShareHash(true)
     }
   }
 
