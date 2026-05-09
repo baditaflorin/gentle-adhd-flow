@@ -1,7 +1,7 @@
 {
   "name": "gentle-adhd-flow",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Local-first ADHD self-management: voice brain-dumps become tasks, focus sessions, habits, and gentle planning.",
   "type": "module",
   "scripts": {
