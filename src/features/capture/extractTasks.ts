@@ -98,6 +98,14 @@ function splitBrainDump(text: string) {
     .filter(Boolean)
 }
 
+// Time words we recognise as "this is when, not what". When one of these
+// follows "by/before/after", the prefix-plus-time-word phrase is a time
+// clause and can be safely stripped from the task title. The previous
+// implementation matched "by/before/after" + any \w+, which butchered
+// titles like "pay rent before the deadline" into "Pay rent deadline".
+const timeWordPattern =
+  '(?:today|tomorrow|tonight|monday|tuesday|wednesday|thursday|friday|saturday|sunday|noon|midnight|morning|afternoon|evening|breakfast|lunch|dinner|bed|bedtime|work|school|class|standup|the meeting|the call|the appointment|\\d{1,2}(?::\\d{2})?\\s?(?:am|pm)?|\\d{1,2}\\/\\d{1,2})'
+
 function cleanTitle(value: string) {
   const cleaned = value
     .replace(actionPrefixes, '')
@@ -105,7 +113,7 @@ function cleanTitle(value: string) {
       /\b(today|tomorrow|tonight|this week|next week|every morning|each morning|every night|each night)\b/gi,
       '',
     )
-    .replace(/\b(by|before|after)\s+\w+/gi, '')
+    .replace(new RegExp(`\\b(by|before|after)\\s+${timeWordPattern}\\b`, 'gi'), '')
     .replace(/\s+/g, ' ')
     .trim()
   if (!cleaned) return ''

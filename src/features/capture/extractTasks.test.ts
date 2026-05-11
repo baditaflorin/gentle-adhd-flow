@@ -28,4 +28,19 @@ describe('extractBrainDump', () => {
     expect(result.tasks[0].title).toBe('Clarify the brain dump')
     expect(result.tasks[0].energy).toBe('low')
   })
+
+  it('keeps noun phrases after by/before/after intact', () => {
+    // The old impl stripped "by/before/after \w+" indiscriminately, so
+    // "pay rent before the deadline" lost "the" and turned into the
+    // nonsense "Pay rent deadline". Time-clause stripping now only fires
+    // for recognized time words.
+    const result = extractBrainDump(
+      'pay rent before the deadline. call dentist by noon. submit report after the meeting',
+      new Date('2026-05-08T08:00:00'),
+    )
+    const titles = result.tasks.map((task) => task.title)
+    expect(titles).toContain('Pay rent before the deadline')
+    expect(titles).toContain('Call dentist')
+    expect(titles).toContain('Submit report')
+  })
 })
