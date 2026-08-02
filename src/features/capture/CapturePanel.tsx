@@ -77,7 +77,13 @@ export function CapturePanel({ snapshot, updateWorkspace }: Props) {
       : 'No pressure. Capture one thought, then choose one tiny next step.'
     try {
       const engine = await speakCue(message)
-      setStatus(engine === 'piper' ? 'Piper voice played' : 'Browser voice played')
+      setStatus(
+        engine === 'piper'
+          ? 'Piper voice played'
+          : engine === 'browser'
+            ? 'Browser voice played'
+            : 'Voice unavailable locally. Read the next action above.',
+      )
     } catch {
       setStatus('Voice unavailable. Read the next action above.')
     }
