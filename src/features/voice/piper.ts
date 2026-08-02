@@ -46,10 +46,27 @@ async function getPiperEngine() {
 
 function speakWithBrowser(text: string): SpeakEngine {
   if (!('speechSynthesis' in window)) return 'silent'
+
+  // Prefer an explicitly local voice so this fallback keeps the app's
+  // local-first privacy promise: some browsers (notably Chrome) ship
+  // "network" voices whose text is sent to a remote TTS service to be
+  // synthesized, which would leak this derived task text off the device.
+  // If the voice list is populated and none of the available voices are
+  // local, stay silent rather than risk sending personal data over the
+  // network. If the list has not loaded yet (a well-known async quirk in
+  // some browsers), fall through and let the browser pick, matching the
+  // prior behavior since we cannot tell local from remote yet.
+  const voices = window.speechSynthesis.getVoices()
+  if (voices.length > 0 && !voices.some((voice) => voice.localService)) {
+    return 'silent'
+  }
+
   window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.rate = 0.92
   utterance.pitch = 0.95
+  const localVoice = voices.find((voice) => voice.localService)
+  if (localVoice) utterance.voice = localVoice
   window.speechSynthesis.speak(utterance)
   return 'browser'
 }

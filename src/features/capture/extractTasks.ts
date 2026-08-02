@@ -90,10 +90,32 @@ export function extractBrainDump(text: string, now = new Date()): ExtractionResu
   }
 }
 
+// Real brain dumps -- especially voice transcripts, which often arrive with
+// little or no punctuation -- routinely chain several distinct tasks with
+// "and"/"then"/"also"/commas instead of sentence breaks, e.g. "call mom and
+// email boss and buy milk". Splitting only on sentence punctuation collapsed
+// runs like that into a single garbled task and silently dropped the rest.
+// We additionally split at a conjunction/comma boundary, but only when it is
+// immediately followed (after optional filler words like "i need to") by an
+// actual task verb -- so plain item lists such as "buy milk and eggs and
+// bread" are correctly left as one task instead of being shredded into
+// fragments that lack a verb and would otherwise vanish.
+const taskVerbSource =
+  '(?:call|email|text|buy|book|schedule|pay|finish|write|send|clean|prepare|review|fix|make|start|submit|renew|cancel|pick up|follow up|ship|file)'
+
+const fillerSource =
+  "(?:(?:i\\s+)?(?:really\\s+|probably\\s+|also\\s+|gotta\\s+|got\\s+to\\s+|need(?:s)?\\s+to\\s+|have\\s+to\\s+|has\\s+to\\s+|must\\s+|should\\s+|please\\s+|remember\\s+(?:to\\s+)?|dont\\s+forget\\s+(?:to\\s+)?|don't\\s+forget\\s+(?:to\\s+)?)){0,3}"
+
+const conjunctionBoundary = new RegExp(
+  `(?:,\\s*|\\s+(?:and then|and also|and|then|plus)\\s+)(?=${fillerSource}${taskVerbSource}\\b)`,
+  'gi',
+)
+
 function splitBrainDump(text: string) {
   return text
     .replace(/\s+/g, ' ')
     .split(/(?:\n|[.;]|(?:\s-\s)|(?:\s•\s))/)
+    .flatMap((part) => part.split(conjunctionBoundary))
     .map((part) => part.trim())
     .filter(Boolean)
 }
